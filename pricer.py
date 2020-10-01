@@ -14,7 +14,7 @@ class MyHTMLParser(HTMLParser):
         self.new_item = False
         self.valid_item = False
         self.potential_price = False
-        self.card_variants = [" (Promo Pack)", " (Prerelease Foil)", " (Buy-a-Box Foil)", " (Borderless)", " (Extended Art)", " (Showcase)"]
+        self.card_variants = [" (Promo Pack)", " (Prerelease Foil)", " (Buy-a-Box Foil)", " (Borderless)", " (Extended Art)", " (Showcase)", " (Brawl Deck Card)"]
         self.valid_cards = ["catalogItem cardItem noBorder", "catalogItem cardItem black", "catalogItem cardItem white"]
         self.valid_quals = ["itemAddToCart  outOfStock  NM active", "itemAddToCart  outOfStock  NM ", "itemAddToCart  NM active"]
         self.prices = []
@@ -102,19 +102,28 @@ class GUI:
         self.cost = 0.0
 
     def price(self):
+        self.cost = 0.0
         deck_data = self.text_box.get("1.0",'end-1c')
         
         # Go over every card
         for line in deck_data.splitlines():
-            print("Line: " + line)
+            print("Pricing: " + line)
             if (line.strip() and line.replace(" ", "")):
                 
                 line = line.rstrip()
+                if (line[0:4] == "1 x "):
+                    line = line[4:]
+                elif (line[0:4] == "1 X "):
+                    line = line[4:]
+                elif (line[0:2] == "1 "):
+                    line = line[2:]
+                
                 self.card_label.config(text="Currently processing: " + str(line))
                 self.card_label.pack()
                 r = requests.get(construct_link(line))
                 parser = MyHTMLParser(line)
                 parser.feed(r.text)
+                print("Price for " + line + " was: " + str(parser.cheapest()))
                 self.cost = self.cost + parser.cheapest()
                 if (parser.cheapest() < 0):
                     self.card_label.config(text="Not recognized: " + str(line))

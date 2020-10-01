@@ -14,7 +14,7 @@ class MyHTMLParser(HTMLParser):
         self.new_item = False
         self.valid_item = False
         self.potential_price = False
-        self.card_variants = [" (Promo Pack)", " (Prerelease Foil)", " (Buy-a-Box Foil)", " (Borderless)", " (Extended Art)", " (Showcase)", " (Brawl Deck Card)"]
+        self.card_variants = [" (Promo Pack)", " (Prerelease Foil)", " (Buy-a-Box Foil)", " (Borderless)", " (Extended Art)", " (Showcase)", " (Brawl Deck Card)", " (Foil)"]
         self.valid_cards = ["catalogItem cardItem noBorder", "catalogItem cardItem black", "catalogItem cardItem white"]
         self.valid_quals = ["itemAddToCart  outOfStock  NM active", "itemAddToCart  outOfStock  NM ", "itemAddToCart  NM active"]
         self.prices = []
@@ -49,14 +49,14 @@ class MyHTMLParser(HTMLParser):
     def handle_data(self, data):
 
         if (self.valid_item):
-            if (data == self.card_name):
+            if (data.lower() == self.card_name.lower()):
                 self.valid_item = False
                 self.exact_item = True
             else:
                 for variant in self.card_variants:
                     var_card = str(data).replace(variant, "")
                     
-                    if (self.card_name == var_card):
+                    if (self.card_name.lower() == var_card.lower()):
                         self.valid_item = False
                         self.exact_item = True
                         break

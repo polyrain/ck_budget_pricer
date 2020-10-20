@@ -33,10 +33,11 @@ class MyHTMLParser(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         if (self.new_item): # If we've seen a match
+            self.new_item = False
             if (attrs[0][1] in self.valid_cards):
                 self.num_valid = self.num_valid + 1 # Here is where we need to do the pattern match
                 self.valid_item = True # Potentially a valid item here, in terms of "legality"
-            self.new_item = False
+            
             
         if (self.exact_item): # If this is EXACTLY a card we can check
             if (tag == 'li' and len(attrs) > 0 and attrs[0][1] in self.valid_quals):
@@ -117,6 +118,9 @@ class GUI:
                     line = line[4:]
                 elif (line[0:2] == "1 "):
                     line = line[2:]
+                elif (int(line[0:2]) > 1):
+                    self.card_label.config(text="Only one copy of a card allowed. Please remove basic lands from list! " + str(line))
+                    break
                 
                 self.card_label.config(text="Currently processing: " + str(line))
                 self.card_label.pack()
@@ -129,7 +133,11 @@ class GUI:
                     self.card_label.config(text="Not recognized: " + str(line))
                     break
             #sleep(0.05)    
-        self.price_label.config(text="Your deck currently costs: " + str(self.cost))
+        if (self.cost <= 30.0 and self.cost >= 0):
+            self.price_label.config(text="Your deck currently costs: " + str(self.cost) + " and is legal!")
+        else:
+            self.price_label.config(text="Your deck currently costs: " + str(self.cost) + " and is illegal! :(")
+        
 
 
 

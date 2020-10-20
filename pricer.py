@@ -112,15 +112,21 @@ class GUI:
             if (line.strip() and line.replace(" ", "")):
                 
                 line = line.rstrip()
-                if (line[0:4] == "1 x "):
-                    line = line[4:]
-                elif (line[0:4] == "1 X "):
-                    line = line[4:]
-                elif (line[0:2] == "1 "):
-                    line = line[2:]
-                elif (int(line[0:2]) > 1):
-                    self.card_label.config(text="Only one copy of a card allowed. Please remove basic lands from list! " + str(line))
+                try:
+                    if (line[0:4] == "1 x "):
+                        line = line[4:]
+                    elif (line[0:4] == "1 X "):
+                        line = line[4:]
+                    elif (line[0:2] == "1 "):
+                        line = line[2:]
+                    elif (int(line[0:2]) > 1):
+                        self.card_label.config(text="Only one copy of a card allowed. Please remove basic lands from list! " + str(line))
+                        break      
+                except ValueError:
+                    self.card_label.config(text="Invalid format entered. Please enter as 1 x CARDNAME")
                     break
+        
+
                 
                 self.card_label.config(text="Currently processing: " + str(line))
                 self.card_label.pack()

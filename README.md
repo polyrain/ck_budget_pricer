@@ -10,7 +10,7 @@ Drop your deck lists in one of the following formats:
 1 X CARDNAME
 ```
 
-Do not include basic lands in your deck list. Cardnames must be the exact card name as printed on the card, case insensitive. Split cards are formatted with a double slash (i.e. Commit // Memory). Pictures below to show how this works:
+**Do not include basic lands in your deck list**. Cardnames must be the exact card name as printed on the card, case insensitive. Split cards are formatted with a double slash (i.e. Commit // Memory). Pictures below to show how this works:
 
 # Example Usage
 
